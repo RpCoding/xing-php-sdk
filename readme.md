@@ -48,7 +48,8 @@ I recommend open this file and then read on.
 
 Laravel code
 
-```Route::get('/xing', function(Request $request){
+```
+Route::get('/xing', function(Request $request){
     $config = [
         'consumer_key'    => env('XING_KEY'),
         'consumer_secret' => env('XING_SECRET'),
