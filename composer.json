@@ -4,7 +4,7 @@
   "type": "library",
   "keywords": ["library", "composer"],
   "require": {
-    "guzzlehttp/guzzle": "^6.1",
+    "guzzlehttp/guzzle": "^7.3",
     "guzzlehttp/oauth-subscriber": "^0.3.0"
   },
   "authors": [
