@@ -45,6 +45,44 @@ I recommend open this file and then read on.
 
 ## Obtaining an Access Token
 
+
+Laravel code
+
+```Route::get('/xing', function(Request $request){
+    $config = [
+        'consumer_key'    => env('XING_KEY'),
+        'consumer_secret' => env('XING_SECRET'),
+        'token'           => '',
+        'token_secret'    => '',
+    ];
+
+    $xingSdk = new XingSDK($config);
+
+    $result = $xingSdk->getRequestToken("http://localhost:8888/xing-token");
+
+    \Illuminate\Support\Facades\Session::put('request_token', $result['request_token']);
+    \Illuminate\Support\Facades\Session::put('request_token_secret', $result['request_token_secret']);
+
+    return redirect($result['authorize_url']);
+});
+
+Route::get('/xing-token', function(Request $request){
+    $config = [
+        'consumer_key'    => env('XING_KEY'),
+        'consumer_secret' => env('XING_SECRET'),
+        'token'           => \Illuminate\Support\Facades\Session::get('request_token'),
+        'token_secret'    => \Illuminate\Support\Facades\Session::get('request_token_secret'),
+    ];
+
+    $xingSdk = new XingSDK($config);
+
+    $result = $xingSdk->getAccessToken($_GET['oauth_verifier']);
+
+
+    print_r($result);exit;
+});
+```
+
 To get an access token you first have to register your application.
 Head over to [https://dev.xing.com](https://dev.xing.com) and register yourself for a Xing application
 to get the consumer key/secret which you have to use with this package.
@@ -74,7 +112,7 @@ Then you have to call the following functions in this order:
    permissions. This URL is the callback-url.
 
    ``` php
-   $result = $xing_api->getRequestToken("http://dev.bahuma.io/xing2?page=redirect");
+   $result = $xingSdk->getRequestToken("http://dev.bahuma.io/xing2?page=redirect");
    ```
 
    The function returns an array with three values.
@@ -108,7 +146,7 @@ Then you have to call the following functions in this order:
    XING.
 
    ``` php
-   $result = $xing_api->getAccessToken($_GET['oauth_verifier']);
+   $result = $xingSdk->getAccessToken($_GET['oauth_verifier']);
    ```
 
    The function returns an array containing the `access_token` and the `access_token_secret` for
